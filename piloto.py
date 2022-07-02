@@ -29,11 +29,11 @@ def cria_piloto(ref, num, cod, nome, sobrenome, nasc, nacio):
     query_get_max_id = "SELECT MAX(driverid) FROM driver"
     max_id = int(cursor.execute(query_get_max_id).fetchone()[0])
     query = (
-        "INSERT INTO constructors"
-        "   VALUES (?,?,?,?,?)"
+        "INSERT INTO driver"
+        "   VALUES (?,?,?,?,?,?,?,?)"
     )
 
-    row = cursor.execute(query, max_id+1, ref, na, nationality, url)
+    row = cursor.execute(query, max_id+1, ref, num, cod, nome, sobrenome, nasc, nacio)
     db.conn.commit()
 
     return True
