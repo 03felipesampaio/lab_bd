@@ -1,5 +1,11 @@
 from database import Db, row_to_json
 
+from pydantic import BaseModel
+
+class Login(BaseModel):
+    user:str
+    password:str
+
 def connect(user, password):
     """Procura um match de usuario e senha e retorna
     informacoes do usuario

@@ -1,23 +1,19 @@
 from fastapi import FastAPI
 from typing import Union
 
-from models import Login, Escuderia, Piloto
 
-from login import connect
+from login import Login, connect
+from piloto import Piloto
+from escuderia import Escuderia, cria_escurderia
 
 app = FastAPI()
 
-
-user = {
-    'role' : 'admin',
-    'user' : 'admin',
-    'password' : 'admin1'
-}
-
+usuario = None
 
 @app.post("/api/login")
 def try_login(login:Login):
-    return connect(login.user, login.password)
+    usuario = connect(login.user, login.password)
+    return usuario
 
 
 @app.get("/api/admin")
@@ -26,13 +22,13 @@ def get_overview_admin():
 
 
 @app.post("/api/escuderias")
-def cria_escuderia(escuderia:Escuderia):
-    return escuderia
+def post_escuderia(esc:Escuderia):
+    return cria_escurderia(esc.consctructor_ref, esc.name, esc.url)
 
 
 @app.get("/api/escuderias/{escuderia}/pilotos")
 def get_piloto_por_nome(escuderia:str, nome:str):
-    pass
+    return cria_piloto()
 
 
 @app.get("/api/escuderias/{escuderia}")
