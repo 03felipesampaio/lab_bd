@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from typing import Union
 
-from models import Escuderia, Piloto
+from models import Login, Escuderia, Piloto
+
+from login import connect
 
 app = FastAPI()
 
@@ -11,6 +13,12 @@ user = {
     'user' : 'admin',
     'password' : 'admin1'
 }
+
+
+@app.post("/api/login")
+def try_login(login:Login):
+    return connect(login.user, login.password)
+
 
 @app.get("/api/admin")
 def get_overview_admin():
