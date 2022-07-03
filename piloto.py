@@ -1,4 +1,4 @@
-from database import Db
+from database import Db, row_to_json
 from pydantic import BaseModel
 from datetime import date
 
@@ -19,7 +19,7 @@ def cria_piloto(ref, num, cod, nome, sobrenome, nasc, nacio):
         escuderia (Escuderia): Nome do usuario
 
     Returns:
-        Bool: Se inserir corretamente retorna True
+        JSON: Se inserir corretamente retorna a linha inserida
     """
 
     db = Db()
@@ -31,9 +31,16 @@ def cria_piloto(ref, num, cod, nome, sobrenome, nasc, nacio):
     query = (
         "INSERT INTO driver"
         "   VALUES (?,?,?,?,?,?,?,?)"
+        "   RETURNING *"
     )
 
-    row = cursor.execute(query, max_id+1, ref, num, cod, nome, sobrenome, nasc, nacio)
+    row = cursor.execute(query, max_id+1, ref,
+            num, cod, nome, sobrenome, nasc, nacio
+        ).fetchone()
     db.conn.commit()
 
-    return True
+    return row_to_json(row, cursor)
+
+
+def piloto_overview(id_piloto):
+    pass

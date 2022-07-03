@@ -1,4 +1,4 @@
-from database import Db
+from database import Db, row_to_json
 from pydantic import BaseModel
 
 class Escuderia(BaseModel):
@@ -29,10 +29,10 @@ def cria_escuderia(ref, nome, nacio, url):
         "   RETURNING *"
     )
 
-    row = db.select_and_convert_to_json(query, max_id+1, ref, nome, nacio, url)
+    row = cursor.execute(query, max_id+1, ref, nome, nacio, url).fetchone()
     db.conn.commit()
 
-    return row
+    return row_to_json(row, cursor)
 
 
 def escuderia_overview(id_escuderia):
