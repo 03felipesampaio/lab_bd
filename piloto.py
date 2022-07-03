@@ -50,18 +50,18 @@ def piloto_overview(id_piloto:int):
     db = Db()
 
     # Queries referentes as mesmas do arquivo ./queries/overviewConstructor.sql
-    querie_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias " \
+    query_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias " \
         "FROM results WHERE position = 1 AND driverid = ?"
 
-    querie_prim_e_ult_ano = (
+    query_prim_e_ult_ano = (
         "SELECT MIN(RA.year) prim_ano, MAX(RA.year) ult_ano "
             "FROM results JOIN races RA USING (raceid) "
             "WHERE driverid = ?"
     )
 
     results = {
-        'prim_e_ult_ano' : db.select_and_convert_to_json(querie_prim_e_ult_ano, id_piloto),
-        'qtd_vitorias'   : db.select_and_convert_to_json(querie_qtd_vitorias, id_piloto),
+        'prim_e_ult_ano' : db.select_and_convert_to_json(query_prim_e_ult_ano, id_piloto),
+        'qtd_vitorias'   : db.select_and_convert_to_json(query_qtd_vitorias, id_piloto),
     }
 
     return results

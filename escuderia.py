@@ -42,14 +42,14 @@ def escuderia_overview(id_escuderia:int):
     db = Db()
 
     # Queries referentes as mesmas do arquivo ./queries/overviewConstructor.sql
-    querie_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias FROM results " \
+    query_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias FROM results " \
         "WHERE position = 1 AND constructorid = ?;"
 
-    querie_qtd_pilotos = "SELECT COUNT(DISTINCT(driverid)) qtd_pilotos " \
+    query_qtd_pilotos = "SELECT COUNT(DISTINCT(driverid)) qtd_pilotos " \
         "FROM results " \
         "WHERE constructorid = ?;"
 
-    querie_prim_e_ult_ano = (
+    query_prim_e_ult_ano = (
         "SELECT MIN(RA.year) prim_ano, MAX(RA.year) ult_ano" \
         "   FROM results " \
         "   JOIN races RA USING (raceid) "\
@@ -57,9 +57,9 @@ def escuderia_overview(id_escuderia:int):
     )
 
     results = {
-        'prim_e_ult_ano' : db.select_and_convert_to_json(querie_prim_e_ult_ano, id_escuderia),
-        'qtd_vitorias'   : db.select_and_convert_to_json(querie_qtd_vitorias, id_escuderia),
-        'qtd_pilotos'    : db.select_and_convert_to_json(querie_qtd_pilotos, id_escuderia)
+        'prim_e_ult_ano' : db.select_and_convert_to_json(query_prim_e_ult_ano, id_escuderia),
+        'qtd_vitorias'   : db.select_and_convert_to_json(query_qtd_vitorias, id_escuderia),
+        'qtd_pilotos'    : db.select_and_convert_to_json(query_qtd_pilotos, id_escuderia)
     }
 
     return results
