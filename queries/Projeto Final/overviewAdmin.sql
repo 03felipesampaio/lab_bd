@@ -1,4 +1,4 @@
-SELECT COUNT(*) FROM driver;
-SELECT COUNT(*) FROM constructors;
-SELECT COUNT(*) FROM races;
-SELECT COUNT(*) FROM seasons;
+SELECT COUNT(*) qtd_pilotos FROM driver;
+SELECT COUNT(*) qtd_escuderias FROM constructors;
+SELECT COUNT(*) qtd_corridas FROM races;
+SELECT COUNT(*) qtd_temporadas FROM seasons;
