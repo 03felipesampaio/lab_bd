@@ -16,7 +16,16 @@ class Db:
         self.conn = pyodbc.connect(conn_str)
 
 
-    # def select(self, query, *params)
+    def select_and_convert_to_json(self, query, *params):
+        cursor = self.conn.cursor()
+        
+        results = []
+        cursor.execute(query, params)
+        for row in cursor:
+            results.append(row_to_json(row))
+
+        return results
+
 
 def row_to_json(cursor, row):
     dicionario = {}
