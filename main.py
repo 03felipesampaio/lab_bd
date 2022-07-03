@@ -1,6 +1,7 @@
 from login import Login, connect
 from piloto import Piloto, cria_piloto, piloto_overview
 from escuderia import Escuderia, cria_escuderia, escuderia_overview
+from admin  import admin_overview
 
 
 from fastapi import FastAPI
@@ -26,7 +27,7 @@ def try_login(login:Login):
 @app.get("/api")
 def get_overview(tipo:TiposUsuario):
     if tipo.value == 'Administrador':
-        pass
+        return admin_overview()
     elif tipo.value == 'Escuderia':
         return escuderia_overview(10)
     elif tipo.value == 'Piloto':
