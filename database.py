@@ -22,12 +22,12 @@ class Db:
         results = []
         cursor.execute(query, params)
         for row in cursor:
-            results.append(row_to_json(row))
+            results.append(row_to_json(row, cursor))
 
         return results
 
 
-def row_to_json(cursor, row):
+def row_to_json(row, cursor):
     dicionario = {}
     columns = [column[0] for column in cursor.description]
 
