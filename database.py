@@ -34,4 +34,4 @@ def row_to_json(row, cursor):
     for value, header in zip(row, columns):
         dicionario[header] = value
 
-    return json.dumps(dicionario)
+    return json.dumps(dicionario, default=str)
