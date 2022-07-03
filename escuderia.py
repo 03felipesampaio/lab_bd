@@ -35,18 +35,22 @@ def cria_escuderia(ref, nome, nacio, url):
     return row_to_json(row, cursor)
 
 
-def escuderia_overview(id_escuderia):
+def escuderia_overview(id_escuderia:int):
+    if not check_escuderia(id_escuderia):
+        raise ValueError('Escuderia nao existe')
+    
     db = Db()
 
     # Queries referentes as mesmas do arquivo ./queries/overviewConstructor.sql
-    querie_qtd_vitorias = "SELECT COUNT(*) FROM results " \
+    querie_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias FROM results " \
         "WHERE position = 1 AND constructorid = ?;"
 
-    querie_qtd_pilotos = "SELECT COUNT(DISTINCT(driverid)) FROM results " \
+    querie_qtd_pilotos = "SELECT COUNT(DISTINCT(driverid)) qtd_pilotos " \
+        "FROM results " \
         "WHERE constructorid = ?;"
 
     querie_prim_e_ult_ano = (
-        "SELECT MIN(RA.year), MAX(RA.year) " \
+        "SELECT MIN(RA.year) prim_ano, MAX(RA.year) ult_ano" \
         "   FROM results " \
         "   JOIN races RA USING (raceid) "\
         "   WHERE constructorid = ?;"
@@ -59,3 +63,11 @@ def escuderia_overview(id_escuderia):
     }
 
     return results
+
+
+def check_escuderia(id_escuderia:int):
+    db = Db()
+    cursor = db.conn.cursor()
+    cursor.execute("SELECT constructorid FROM constructors WHERE constructorid = ?", id_escuderia)
+    if cursor.fetchone(): return True
+    else: return False

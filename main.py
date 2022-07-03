@@ -1,10 +1,17 @@
-from fastapi import FastAPI
-from typing import Union
-
-
 from login import Login, connect
 from piloto import Piloto, cria_piloto, piloto_overview
 from escuderia import Escuderia, cria_escuderia, escuderia_overview
+
+
+from fastapi import FastAPI
+from typing import Union
+from enum import Enum
+
+class TiposUsuario(str, Enum):
+    admin = "Administrador"
+    escuderia = "Escuderia"
+    piloto = "Piloto"
+
 
 app = FastAPI()
 
@@ -17,13 +24,13 @@ def try_login(login:Login):
 
 
 @app.get("/api")
-def get_overview():
-    if usuario.tipo == 'Administrador':
+def get_overview(tipo:TiposUsuario):
+    if tipo.value == 'Administrador':
         pass
-    elif usuario.tipo == 'Escuderia':
-        escuderia_overview(usuario.idoriginal_constructor)
-    elif usuario.tipo == 'Piloto':
-        piloto_overview(usuario.idoriginal_driver)
+    elif tipo.value == 'Escuderia':
+        return escuderia_overview(10)
+    elif tipo.value == 'Piloto':
+        piloto_overview(853)
 
 
 @app.post("/api/escuderias")
