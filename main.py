@@ -23,7 +23,7 @@ def try_login(login:Login):
 
 
 @app.get("/api")
-def get_overview(user:User, tipo:TiposUsuario):
+def get_overview(user:User):
     if user.tipo == 'Administrador':
         return admin_overview()
     elif user.tipo == 'Escuderia':
@@ -33,7 +33,7 @@ def get_overview(user:User, tipo:TiposUsuario):
 
 
 @app.get("/api/relatorios")
-def get_relatorios(user:User, tipo:TiposUsuario):
+def get_relatorios(user:User):
     if user.tipo == 'Administrador':
         return admin_relatorios()
     elif user.tipo == 'Escuderia':
