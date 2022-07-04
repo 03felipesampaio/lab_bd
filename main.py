@@ -1,4 +1,4 @@
-from login import Login, connect
+from login import Login, User, connect
 from admin import admin_overview, admin_relatorios
 from escuderia import Escuderia, cria_escuderia, escuderia_overview, escuderia_relatorios
 from piloto import Piloto, cria_piloto, piloto_overview, piloto_relatorios
@@ -16,36 +16,34 @@ class TiposUsuario(str, Enum):
 
 app = FastAPI()
 
-usuario:Union[dict,None] = None
 
 @app.post("/api/login")
 def try_login(login:Login):
-    usuario = connect(login.user, login.password)
-    return usuario
+    return connect(login.user, login.password)
 
 
 @app.get("/api")
-def get_overview(tipo:TiposUsuario):
-    if tipo.value == 'Administrador':
+def get_overview(user:User, tipo:TiposUsuario):
+    if user.tipo == 'Administrador':
         return admin_overview()
-    elif tipo.value == 'Escuderia':
-        return escuderia_overview(10)
-    elif tipo.value == 'Piloto':
-        return piloto_overview(856)
+    elif user.tipo == 'Escuderia':
+        return escuderia_overview(user.id_construtor)
+    elif user.tipo == 'Piloto':
+        return piloto_overview(user.id_driver)
 
 
 @app.get("/api/relatorios")
-def get_relatorios(tipo:TiposUsuario):
-    if tipo.value == 'Administrador':
+def get_relatorios(user:User, tipo:TiposUsuario):
+    if user.tipo == 'Administrador':
         return admin_relatorios()
-    elif tipo.value == 'Escuderia':
-        return escuderia_relatorios(6)
-    elif tipo.value == 'Piloto':
-        return piloto_relatorios(30)
+    elif user.tipo == 'Escuderia':
+        return escuderia_relatorios(user.id_construtor)
+    elif user.tipo == 'Piloto':
+        return piloto_relatorios(user.id_driver)
 
 
 @app.post("/api/escuderias")
-def post_escuderia(esc:Escuderia):
+def post_escuderia(user:User, esc:Escuderia):
     return cria_escuderia(esc.constructor_ref, esc.name, esc.nationality, esc.url)
 
 
@@ -55,9 +53,12 @@ def get_piloto_por_nome(escuderia:str, nome:str):
 
 
 @app.post("/api/pilotos")
-def post_piloto(pil:Piloto):
-        return cria_piloto(
-            pil.driver_ref, pil.number, pil.code,
-            pil.forename, pil.surname, pil.date_of_birth,
-            pil.nationality)
+def post_piloto(user:User, pil:Piloto):
+        if user.tipo == "Administrador":
+            return cria_piloto(
+                pil.driver_ref, pil.number, pil.code,
+                pil.forename, pil.surname, pil.date_of_birth,
+                pil.nationality)
+        else:
+            raise ValueError('Usuario invalido')
     

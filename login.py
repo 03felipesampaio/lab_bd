@@ -2,11 +2,20 @@ from database import Db, row_to_json
 
 from pydantic import BaseModel
 
+
 class Login(BaseModel):
     user:str
     password:str
 
-def connect(user, password):
+
+class User(BaseModel):
+    user_id:int
+    tipo:str
+    id_construtor:int
+    id_driver:int
+
+
+def connect(user, password) -> User:
     """Procura um match de usuario e senha e retorna
     informacoes do usuario
 
@@ -18,7 +27,7 @@ def connect(user, password):
         ValueError: Caso o usuario ou senha estejam errados
 
     Returns:
-        Json: Informacoes do usuario
+        User: Informacoes do usuario
     """
 
     db = Db()
@@ -26,16 +35,14 @@ def connect(user, password):
     cursor = db.conn.cursor()
 
     query = (
-        "SELECT userid, login, tipo, idoriginal_constructor idoriginal_driver FROM users"
+        "SELECT userid, tipo, idoriginal_constructor, idoriginal_driver FROM users"
         "   WHERE login = ? AND password = MD5(?)"
     )
-
-    cursor.execute(query, user, password)
-
-    row = cursor.fetchone()
     
-    if row:            
-        return row_to_json(cursor, row)
+    usuario = db.select_and_convert_to_json(query, user, password)
+
+    if usuario:            
+        return usuario
     else:
         raise ValueError('User ou senha invalidos')
 
