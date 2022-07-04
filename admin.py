@@ -17,7 +17,7 @@ def admin_overview():
 
     return results
 
-def admin_relatorio():
+def admin_relatorios():
     db = Db()
     
     query_qtd_resultados = (
