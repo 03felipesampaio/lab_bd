@@ -35,6 +35,14 @@ def cria_escuderia(ref, nome, nacio, url):
     return row_to_json(row, cursor)
 
 
+def check_escuderia(id_escuderia:int):
+    db = Db()
+    cursor = db.conn.cursor()
+    cursor.execute("SELECT constructorid FROM constructors WHERE constructorid = ?", id_escuderia)
+    if cursor.fetchone(): return True
+    else: return False
+
+
 def escuderia_overview(id_escuderia:int):
     if not check_escuderia(id_escuderia):
         raise ValueError('Escuderia nao existe')
@@ -65,9 +73,43 @@ def escuderia_overview(id_escuderia:int):
     return results
 
 
-def check_escuderia(id_escuderia:int):
+def escuderia_relatorios(id_escuderia:int):
+    if not check_escuderia(id_escuderia):
+        raise ValueError('Escuderia nao existe')
+    
     db = Db()
+
+    # Queries referentes as mesmas do arquivo ./queries/overviewConstructor.sql
+    query_index_relatorio_3 = (
+        "CREATE INDEX IF NOT EXISTS wins_construc " 
+        "   ON results(driverid, constructorid) WHERE position = 1;"
+        "-- DROP INDEX wins_construc;"
+    )
+
+    query_relatorio_3 = (
+        "SELECT D.forename Nome, D.surname Sobrenome, COUNT(*) Vitórias"
+        "   FROM results R"
+        "       JOIN driver D USING (driverid)"
+        "       WHERE R.position = 1 AND R.constructorid = ?"
+        "       GROUP BY D.driverid"
+        "       ORDER BY COUNT(*) DESC;"
+    )
+
+    query_relatorio_4 = (
+        "SELECT S.status, COUNT(*) Resultados from results R"
+        "    JOIN status S USING(statusid)"
+        "    WHERE R.constructorid = ?"
+        "    GROUP BY S.statusid"
+        "    ORDER BY COUNT(*) DESC;"
+    )
+
+
     cursor = db.conn.cursor()
-    cursor.execute("SELECT constructorid FROM constructors WHERE constructorid = ?", id_escuderia)
-    if cursor.fetchone(): return True
-    else: return False
+    cursor.execute(query_index_relatorio_3)
+
+    results = {
+        'relatorio_3' : db.select_and_convert_to_json(query_relatorio_3, id_escuderia),
+        'relatorio_4' : db.select_and_convert_to_json(query_relatorio_4, id_escuderia)
+    }
+
+    return results

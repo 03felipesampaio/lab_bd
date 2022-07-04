@@ -16,3 +16,21 @@ def admin_overview():
     }
 
     return results
+
+def admin_relatorio():
+    db = Db()
+    
+    query_qtd_resultados = (
+        "SELECT S.status, COUNT(*) Resultados from results R"
+	        "JOIN status S USING(statusid)"
+	        "GROUP BY S.statusid"
+	        "ORDER BY S.status;"
+    )
+    
+
+    results = {
+        'relatorio_1' : db.select_and_convert_to_json(query_qtd_resultados),
+        'relatorio_2' : db.select_and_convert_to_json()
+    }
+
+    return results
