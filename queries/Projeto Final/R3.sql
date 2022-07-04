@@ -1,4 +1,4 @@
-CREATE INDEX wins_construc ON results(driverid, constructorid) WHERE position = 1;
+CREATE INDEX IF NOT EXISTS wins_construc ON results(driverid, constructorid) WHERE position = 1;
 -- DROP INDEX wins_construc;
 
 SELECT D.forename "Nome", D.surname "Sobrenome", COUNT(*) "Vitórias"
@@ -6,4 +6,4 @@ SELECT D.forename "Nome", D.surname "Sobrenome", COUNT(*) "Vitórias"
 	JOIN driver D USING (driverid)
 	WHERE R."position" = 1 AND R.constructorid = 1
 	GROUP BY D.driverid
-	ORDER BY D.forename;
+	ORDER BY COUNT(*) DESC;
