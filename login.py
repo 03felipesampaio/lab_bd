@@ -46,6 +46,30 @@ def connect(user, password) -> User:
     else:
         raise ValueError('User ou senha invalidos')
 
+def get_name(user: User):
+    db = Db()
+
+    cursor = db.conn.cursor()
+
+    query1 = (
+        "SELECT (forename || ' ' || surname) as name from driver where driverid = ?"
+    )
+    query2 = (
+        "SELECT name from constructors where constructorid = ?"
+    )
+    
+    if(user.tipo == "Administrador"):
+        d = dict()
+        d['name'] = "Administrador"
+        return d
+    elif(user.tipo == "Piloto"):
+        usuario = db.select_and_convert_to_json(query1, user.id_driver)
+    else:
+        usuario = db.select_and_convert_to_json(query2, user.id_constructor)
+
+    if usuario:
+        return usuario.pop()
+
 
 # def get_usuario(id):
 #     db = Db()
