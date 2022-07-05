@@ -1,4 +1,4 @@
-from login import Login, User, connect
+from login import Login, User, connect, get_name
 from admin import admin_overview, admin_relatorio_1, aeroportos_proximos
 from escuderia import Escuderia, cria_escuderia, escuderia_overview, escuderia_relatorios
 from piloto import Piloto, cria_piloto, piloto_overview, piloto_relatorios, procura_piloto_por_nome
@@ -39,6 +39,10 @@ def try_login(login:Login):
         return usuario
     else:
         raise HTTPException(status_code=404, detail="Usuario ou senha incorretos")
+
+@app.post("/api/name")
+def name(user:User):
+    return get_name(user)
 
 
 @app.post("/api/overview")
