@@ -1,6 +1,14 @@
-# lab_bd
+# Trabalho de Formula 1
 Projeto final da disciplina Laboratório de Base de Dados
 
 
-Ordem das queries
-1. Users.sql
+## Como preparar o ambiente
+1. python -m venv venv
+2. CMD
+> .\venv\Scripts\activate
+3. PowerShell
+> .\venv\Scripts\Activate
+
+>pip install "fastapi[all]"
+
+>pip install pyodbc

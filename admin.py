@@ -9,10 +9,10 @@ def admin_overview():
     query_qtd_temporadas = "SELECT COUNT(*) qtd_temporadas FROM seasons"
 
     results = {
-        'qtd_pilotos'    : db.select_and_convert_to_json(query_qtd_pilotos),
-        'qtd_escuderias' : db.select_and_convert_to_json(query_qtd_escuderias),
-        'qtd_corridas'   : db.select_and_convert_to_json(query_qtd_corridas),
-        'qtd_temporadas' : db.select_and_convert_to_json(query_qtd_temporadas)
+        'numberOfPilots'  : db.select_and_convert_to_json(query_qtd_pilotos),
+        'numberOfTeams'   : db.select_and_convert_to_json(query_qtd_escuderias),
+        'numberOfRaces'   : db.select_and_convert_to_json(query_qtd_corridas),
+        'numberOfSeasons' : db.select_and_convert_to_json(query_qtd_temporadas)
     }
 
     return results
@@ -29,8 +29,11 @@ def admin_relatorios():
     
 
     results = {
-        'relatorio_1' : db.select_and_convert_to_json(query_qtd_resultados),
-        'relatorio_2' : db.select_and_convert_to_json()
+        'relatorio_1' : db.select_and_convert_to_json(query_qtd_resultados)
     }
 
     return results
+
+
+def aeroportos_proximos(cidade:str):
+    pass

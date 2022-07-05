@@ -1,5 +1,7 @@
 import pyodbc
-import json
+from dotenv import dotenv_values
+
+config = dotenv_values(".env")
 
 # TODO Add documentacao https://www.sqlshack.com/configure-odbc-drivers-for-postgresql/
 
@@ -7,9 +9,9 @@ class Db:
     def __init__(self) -> None:
         conn_str = (
             "DRIVER={PostgreSQL Unicode};"
-            "DATABASE=proj_final;"
-            "UID=postgres;"
-            "PWD=1;"
+            f"DATABASE={config['DATABASE']};"
+            f"UID={config['USUARIO']};"
+            f"PWD={config['SENHA']};"
             "SERVER=localhost;"
             "PORT=5432;"
         )

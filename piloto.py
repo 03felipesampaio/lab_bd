@@ -1,3 +1,4 @@
+from select import select
 from database import Db, row_to_json
 from pydantic import BaseModel
 from datetime import date
@@ -42,10 +43,20 @@ def cria_piloto(ref, num, cod, nome, sobrenome, nasc, nacio):
     return row_to_json(row, cursor)
 
 
-# def procura_piloto_por_nome(id_escuderia:int, id_piloto:int):
-#     query = (
-#         "SELECT * FROM"
-#     )
+def procura_piloto_por_nome(id_escuderia:int, id_piloto:int):
+    db = Db()
+    
+    query = (
+        "SELECT DISTINCT concat(d.forename, ' ', d.surname) nome_completo, "
+        "       d.dob data_nascimento, d.nationality nacionalidade" 
+        "    FROM driver d "
+        "    JOIN results r "
+        "        ON d.driverid = r.driverid "
+        "    WHERE r.constructorid = ?"
+        "        AND d.forename = ?"
+    )
+
+    return db.select_and_convert_to_json(query, id_escuderia, id_piloto)
 
 
 def check_piloto(id_piloto:int):

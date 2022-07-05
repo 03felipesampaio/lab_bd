@@ -11,7 +11,7 @@ class Login(BaseModel):
 class User(BaseModel):
     user_id:int
     tipo:str
-    id_construtor:int
+    id_constructor:int
     id_driver:int
 
 
@@ -45,4 +45,15 @@ def connect(user, password) -> User:
         return usuario
     else:
         raise ValueError('User ou senha invalidos')
+
+
+# def get_usuario(id):
+#     db = Db()
+
+#     query = (
+#         "SELECT userid, tipo, idoriginal_constructor, idoriginal_driver FROM users"
+#         "   WHERE userid = ?"
+#     )
+
+#     db.select_and_convert_to_json()
 
