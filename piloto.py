@@ -1,4 +1,3 @@
-from select import select
 from database import Db, row_to_json
 from pydantic import BaseModel
 from datetime import date
@@ -85,8 +84,8 @@ def piloto_overview(id_piloto:int):
     )
 
     results = {
-        'prim_e_ult_ano' : db.select_and_convert_to_json(query_prim_e_ult_ano, id_piloto),
-        'qtd_vitorias'   : db.select_and_convert_to_json(query_qtd_vitorias, id_piloto),
+        'firstAndLastYearsOfData' : db.select_and_convert_to_json(query_prim_e_ult_ano, id_piloto),
+        'numberOfWins'   : db.select_and_convert_to_json(query_qtd_vitorias, id_piloto),
     }
 
     return results

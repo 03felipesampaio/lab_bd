@@ -11,8 +11,8 @@ class Login(BaseModel):
 class User(BaseModel):
     user_id:int
     tipo:str
-    id_constructor:int
-    id_driver:int
+    id_constructor:int = None
+    id_driver:int = None
 
 
 def connect(user, password) -> User:

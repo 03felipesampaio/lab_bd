@@ -1,10 +1,10 @@
 from login import Login, User, connect
-from admin import admin_overview, admin_relatorios, aeroportos_proximos
+from admin import admin_overview, admin_relatorio_1, aeroportos_proximos
 from escuderia import Escuderia, cria_escuderia, escuderia_overview, escuderia_relatorios
 from piloto import Piloto, cria_piloto, piloto_overview, piloto_relatorios, procura_piloto_por_nome
 
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 from enum import Enum
@@ -34,7 +34,11 @@ app.add_middleware(
 
 @app.post("/api/login")
 def try_login(login:Login):
-    return connect(login.user, login.password)
+    usuario = connect(login.user, login.password)
+    if usuario:
+        return usuario
+    else:
+        raise HTTPException(status_code=404, detail="Usuario ou senha incorretos")
 
 
 @app.post("/api/overview")
@@ -42,19 +46,31 @@ def get_overview(user:User):
     if user.tipo == 'Administrador':
         return admin_overview()
     elif user.tipo == 'Escuderia':
-        return escuderia_overview(user.id_constructor)
+        try:
+            return escuderia_overview(user.id_constructor)
+        except Exception as e:
+            raise HTTPException(404, "Codigo da escuderia invalido")
     elif user.tipo == 'Piloto':
-        return piloto_overview(user.id_driver)
+        try:
+            return piloto_overview(user.id_driver)
+        except Exception as e:
+            raise HTTPException(404, "Codigo do piloto invalido")
 
 
 @app.post("/api/relatorios")
 def get_relatorios(user:User):
     if user.tipo == 'Administrador':
-        return admin_relatorios()
+        return admin_relatorio_1()
     elif user.tipo == 'Escuderia':
-        return escuderia_relatorios(user.id_constructor)
+        try:
+            return escuderia_relatorios(user.id_constructor)
+        except Exception as e:
+            raise HTTPException(404, "Codigo da escuderia invalido")
     elif user.tipo == 'Piloto':
-        return piloto_relatorios(user.id_driver)
+        try:
+            return piloto_relatorios(user.id_driver)
+        except Exception as e:
+            raise HTTPException(404, "Codigo do piloto invalido")
 
 
 @app.post("/api/relatorios/{cidade}")
@@ -65,13 +81,18 @@ def get_relatorio_2(user:User, cidade:str):
 
 @app.post("/api/escuderias")
 def post_escuderia(user:User, esc:Escuderia):
-    return cria_escuderia(esc.constructor_ref, esc.name, esc.nationality, esc.url)
+    if user.tipo == 'Administrador':
+        return cria_escuderia(esc.constructor_ref, esc.name, esc.nationality, esc.url)
+    else:
+        raise HTTPException(404, "Usuario nao eh admin")
 
 
 @app.post("/api/escuderias/{escuderia}/pilotos")
 def get_piloto_por_nome(user:User, nome:str):
     if user.tipo == 'Escuderia':
         return procura_piloto_por_nome(user.id_constructor, nome)
+    else:
+        raise HTTPException(404, "Usuario nao eh Escuderia")
 
 
 @app.post("/api/pilotos")
@@ -82,5 +103,5 @@ def post_piloto(user:User, pil:Piloto):
                 pil.forename, pil.surname, pil.date_of_birth,
                 pil.nationality)
         else:
-            raise ValueError('Usuario invalido')
+            raise HTTPException(404, "Usuario nao e administrador")
     
