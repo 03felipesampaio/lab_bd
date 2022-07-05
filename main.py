@@ -42,7 +42,7 @@ def get_overview(user:User):
     if user.tipo == 'Administrador':
         return admin_overview()
     elif user.tipo == 'Escuderia':
-        return escuderia_overview(user.id_construtor)
+        return escuderia_overview(user.id_constructor)
     elif user.tipo == 'Piloto':
         return piloto_overview(user.id_driver)
 
@@ -52,7 +52,7 @@ def get_relatorios(user:User):
     if user.tipo == 'Administrador':
         return admin_relatorios()
     elif user.tipo == 'Escuderia':
-        return escuderia_relatorios(user.id_construtor)
+        return escuderia_relatorios(user.id_constructor)
     elif user.tipo == 'Piloto':
         return piloto_relatorios(user.id_driver)
 
@@ -71,7 +71,7 @@ def post_escuderia(user:User, esc:Escuderia):
 @app.post("/api/escuderias/{escuderia}/pilotos")
 def get_piloto_por_nome(user:User, nome:str):
     if user.tipo == 'Escuderia':
-        return procura_piloto_por_nome(user.id_construtor, nome)
+        return procura_piloto_por_nome(user.id_constructor, nome)
 
 
 @app.post("/api/pilotos")
