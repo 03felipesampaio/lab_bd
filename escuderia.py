@@ -65,9 +65,9 @@ def escuderia_overview(id_escuderia:int):
     )
 
     results = {
-        'prim_e_ult_ano' : db.select_and_convert_to_json(query_prim_e_ult_ano, id_escuderia),
-        'qtd_vitorias'   : db.select_and_convert_to_json(query_qtd_vitorias, id_escuderia),
-        'qtd_pilotos'    : db.select_and_convert_to_json(query_qtd_pilotos, id_escuderia)
+        'firstAndLastYearsOfData' : db.select_and_convert_to_json(query_prim_e_ult_ano, id_escuderia),
+        'numberOfWins'   : db.select_and_convert_to_json(query_qtd_vitorias, id_escuderia),
+        'numberOfPilots'    : db.select_and_convert_to_json(query_qtd_pilotos, id_escuderia)
     }
 
     return results
