@@ -112,7 +112,7 @@ def piloto_relatorios(id_piloto:int):
         "    JOIN races RA USING(raceid)"
         "    WHERE R.position = 1 AND R.driverid = ?"
         "    GROUP BY ROLLUP(RA.year, RA.name)"
-        "    ORDER BY RA.year DESC, count(*)  DESC;"
+        "    ORDER BY RA.year ASC, RA.name  ASC;"
     )
 
     query_relatorio_6 = (
