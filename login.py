@@ -1,4 +1,4 @@
-from database import Db, row_to_json
+from database import Db
 
 from pydantic import BaseModel
 
@@ -45,6 +45,7 @@ def connect(user, password) -> User:
         return usuario
     else:
         raise ValueError('User ou senha invalidos')
+
 
 def get_name(user: User):
     db = Db()
