@@ -28,6 +28,7 @@ def admin_relatorio_1():
     Returns:
         JSON: Json com relatorio
     """
+    
     db = Db()
     
     query_qtd_resultados = (
@@ -54,6 +55,7 @@ def aeroportos_proximos(cidade:str):
     Returns:
         JSON: JSON com os resultados
     """
+    
     db = Db()
     
     query_aeroportos = (
