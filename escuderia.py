@@ -20,24 +20,32 @@ def cria_escuderia(ref, nome, nacio, url):
     db = Db()
 
     cursor = db.conn.cursor()
-    # TODO alterar a tabela de escuderia, mudar o id pra serial.
-    query_get_max_id = "SELECT MAX(constructorid) FROM constructors"
-    max_id = int(cursor.execute(query_get_max_id).fetchone()[0])
+
     query = (
-        "INSERT INTO constructors"
-        "   VALUES (?,?,?,?,?)"
+        "INSERT INTO constructors (constructorref, name, nationality, url)"
+        "   VALUES (?,?,?,?)"
         "   RETURNING *"
     )
 
-    row = cursor.execute(query, max_id+1, ref, nome, nacio, url).fetchone()
+    row = cursor.execute(query, ref, nome, nacio, url).fetchone()
     db.conn.commit()
 
     return row_to_json(row, cursor)
 
 
 def check_escuderia(id_escuderia:int):
+    """Verifica se escuderia ja existe
+
+    Args:
+        id_escuderia (int): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    
     db = Db()
     cursor = db.conn.cursor()
+    # Verifica se existe uma escuderia com esse id
     cursor.execute("SELECT constructorid FROM constructors WHERE constructorid = ?", id_escuderia)
     if cursor.fetchone(): return True
     else: return False
@@ -49,7 +57,7 @@ def escuderia_overview(id_escuderia:int):
     
     db = Db()
 
-    # Queries referentes as mesmas do arquivo ./queries/overviewConstructor.sql
+    # Queries referente ao arquivo ./queries/overviewConstructor.sql
     query_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias FROM results " \
         "WHERE position = 1 AND constructorid = ?;"
 

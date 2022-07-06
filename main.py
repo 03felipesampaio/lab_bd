@@ -1,22 +1,18 @@
+# Libs para API
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
+# Funcoes de login
 from login import Login, User, connect, get_name
+# Funcoes do admin
 from admin import admin_overview, admin_relatorio_1, aeroportos_proximos
+# Funcoes da escuderia
 from escuderia import Escuderia, cria_escuderia, escuderia_overview, escuderia_relatorios
+# Funcoes do piloto
 from piloto import Piloto, cria_piloto, piloto_overview, piloto_relatorios, procura_piloto_por_nome
 
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from typing import Union
-from enum import Enum
-
-class TiposUsuario(str, Enum):
-    admin = "Administrador"
-    escuderia = "Escuderia"
-    piloto = "Piloto"
-
-
 app = FastAPI()
-
 
 origins = [
     "http://localhost",

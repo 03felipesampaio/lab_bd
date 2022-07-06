@@ -1,6 +1,11 @@
 from database import Db
 
 def admin_overview():
+    """Retorna overview do administrador
+
+    Returns:
+        JSON: Cada query sera retornada como um JSON
+    """
     db = Db()
     
     query_qtd_pilotos = "SELECT COUNT(*) qtd_pilotos FROM driver"
@@ -18,6 +23,12 @@ def admin_overview():
     return results
 
 def admin_relatorio_1():
+    """Devolve o primeiro relatorio do administrador
+
+    Returns:
+        JSON: Json com relatorio
+    """
+    
     db = Db()
     
     query_qtd_resultados = (
@@ -35,33 +46,34 @@ def admin_relatorio_1():
 
 
 def aeroportos_proximos(cidade:str):
+    """Retorna o relatorio dois do administrador. A partir de uma
+    cidade, procura os aeroportos no raio de 100km
+
+    Args:
+        cidade (str): Nome da cidade a ser buscada
+
+    Returns:
+        JSON: JSON com os resultados
+    """
+    
     db = Db()
     
+    cursor = db.conn.cursor()
+    cursor.execute('CALL prepara_relatorio_2();')
+
     query_aeroportos = (
         # "-- O setup dessa query, incluindo os indices estao no arquivo setup_R2.sql"
-        "SELECT C.Name Cidade, A.iatacode, A.\"Aeroporto\", A.\"Cid_Aero\","
-        "    earth_distance("
-        "        ll_to_earth("
-        "            A.\"Latitude\", A.\"Longitude\""
-        "        )," 
-        "        ll_to_earth("
-        "            C.Lat, C.Long"
-                "	)"
-                ") distancia, A.type"
-        "   FROM aeroportos_brasileiros A, cidades_brasileiras C"
-        "   WHERE "
-        "   	earth_distance("
-        "   		ll_to_earth("
-        "   			A.\"Latitude\", A.\"Longitude\""
-        "   		) , "
-        "   		ll_to_earth("
-        "   			C.lat, C.long"
-        "   		)"
-        "   	) <= 100000 AND C.name ILIKE ?;"
+        """
+        SELECT C.Name "Cidade", A.iatacode, A."Aeroporto", A."Cid_Aero",
+                earth_distance(ll_to_earth(A."Latitude", A."Longitude"
+                ) , ll_to_earth(C.Lat, C.Long)) "Distância", A."type"
+            FROM aeroportos_brasileiros A, cidades_brasileiras C
+            WHERE earth_distance(ll_to_earth(A."Latitude", A."Longitude"
+        ) , ll_to_earth(C.Lat, C.Long)) <= 100000 AND C."name"=?;"""
     )
 
     results = {
-        'relatorio_2' : db.select_and_convert_to_json(query_aeroportos, cidade+'%')
+        'relatorio_2' : db.select_and_convert_to_json(query_aeroportos, cidade)
     }
 
     return results

@@ -25,16 +25,14 @@ def cria_piloto(ref, num, cod, nome, sobrenome, nasc, nacio):
     db = Db()
 
     cursor = db.conn.cursor()
-    # TODO alterar a tabela de piloto, mudar o id pra serial.
-    query_get_max_id = "SELECT MAX(driverid) FROM driver"
-    max_id = int(cursor.execute(query_get_max_id).fetchone()[0])
+
     query = (
-        "INSERT INTO driver"
-        "   VALUES (?,?,?,?,?,?,?,?)"
+        "INSERT INTO driver (driverref, number, code, forename,surname, dob, nationality)"
+        "   VALUES (?,?,?,?,?,?,?)"
         "   RETURNING *"
     )
 
-    row = cursor.execute(query, max_id+1, ref,
+    row = cursor.execute(query, ref,
             num, cod, nome, sobrenome, nasc, nacio
         ).fetchone()
     db.conn.commit()
