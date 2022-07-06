@@ -10,10 +10,9 @@ Projeto final da disciplina Laboratório de Base de Dados
  
  > Tambem execute o arquivo ./queries/altera_int_para_sequencia.sql
  
- Já que os campos de driverid e constructorid não são declarados como SERIAL
+ Já que os campos de driverid e constructorid não são declarados como SERIAL.
 
-
- Depois vamos criar as tabelas de usuários e logs. Então, por favor
+Depois vamos criar as tabelas de usuários e logs. Então, por favor
  > Execute o arquivo ./queries/users.sql no pgAdmin
 
  E então 
@@ -22,6 +21,16 @@ Projeto final da disciplina Laboratório de Base de Dados
  Para preparar o ambiente para o relatorio 2.
 
  Após isso o banco de dados estará pronto para uso.
+
+### Arquivo de ambiente
+Crie um arquivo na raiz do projeto chamado '.env' 
+(bem conhecido como dot-env) que servirá para colocarmos informações para conexão com o banco de dados. Em seguir copie o conteúdo abaixo e substitua o conteúdo envoltos de <>.
+
+DATABASE=\<nome_database>
+
+USUARIO=\<nome_usuario>
+
+SENHA=\<senha>
 
 ### Python
 Para criar a API utilizamos o framework FastAPI, que permite criar APIs rapidamente. Para interagir com o banco de dados foi utilizada a lib de python PyODBC, que NÃO é um ORM. Para utilizar a API vamos precisar instalar alguns pacotes então é recomendado que se crie um ambiente virtual.
