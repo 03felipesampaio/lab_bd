@@ -79,7 +79,7 @@ def get_relatorios(user:User):
 
 @app.post("/api/relatorios/{cidade}")
 def get_relatorio_2(user:User, cidade:str):
-    if user.tipo == 'Adminstrador':
+    if user.tipo == 'Administrador':
         return aeroportos_proximos(cidade)
 
 

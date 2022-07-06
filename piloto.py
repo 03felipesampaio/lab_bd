@@ -42,20 +42,20 @@ def cria_piloto(ref, num, cod, nome, sobrenome, nasc, nacio):
     return row_to_json(row, cursor)
 
 
-def procura_piloto_por_nome(id_escuderia:int, id_piloto:int):
+def procura_piloto_por_nome(id_escuderia:int, id_piloto:str):
     db = Db()
     
     query = (
-        "SELECT DISTINCT concat(d.forename, ' ', d.surname) nome_completo, "
-        "       d.dob data_nascimento, d.nationality nacionalidade" 
+        "SELECT DISTINCT concat(d.forename, ' ', d.surname) nome, "
+        "       d.dob nasc, d.nationality nacionalidade" 
         "    FROM driver d "
         "    JOIN results r "
         "        ON d.driverid = r.driverid "
         "    WHERE r.constructorid = ?"
-        "        AND d.forename = ?"
+        "        AND d.forename ILIKE ?"
     )
-
-    return db.select_and_convert_to_json(query, id_escuderia, id_piloto)
+    print(id_piloto+'%')
+    return db.select_and_convert_to_json(query, id_escuderia, id_piloto+'%')
 
 
 def check_piloto(id_piloto:int):

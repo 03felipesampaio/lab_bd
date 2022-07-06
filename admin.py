@@ -57,7 +57,7 @@ def aeroportos_proximos(cidade:str):
         "   		ll_to_earth("
         "   			C.lat, C.long"
         "   		)"
-        "   	) <= 100000 AND C.name='?';"
+        "   	) <= 100000 AND C.name=?%;"
     )
 
     results = {
