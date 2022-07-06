@@ -20,16 +20,14 @@ def cria_escuderia(ref, nome, nacio, url):
     db = Db()
 
     cursor = db.conn.cursor()
-    # TODO alterar a tabela de escuderia, mudar o id pra serial.
-    query_get_max_id = "SELECT MAX(constructorid) FROM constructors"
-    max_id = int(cursor.execute(query_get_max_id).fetchone()[0])
+
     query = (
-        "INSERT INTO constructors"
-        "   VALUES (?,?,?,?,?)"
+        "INSERT INTO constructors (constructorref, name, nationality, url)"
+        "   VALUES (?,?,?,?)"
         "   RETURNING *"
     )
 
-    row = cursor.execute(query, max_id+1, ref, nome, nacio, url).fetchone()
+    row = cursor.execute(query, ref, nome, nacio, url).fetchone()
     db.conn.commit()
 
     return row_to_json(row, cursor)

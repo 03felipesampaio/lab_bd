@@ -8,6 +8,11 @@ Projeto final da disciplina Laboratório de Base de Dados
  O primeirio passo é realizar a carga dos dados que estão contidos nos arquivos disponibilizados. Essa carga é a mesma fornecida pelo professor no T1.
  > Execute o arquivo ./queries/carga_bd.sql no pgAdmin
  
+ > Tambem execute o arquivo ./queries/altera_int_para_sequencia.sql
+ 
+ Já que os campos de driverid e constructorid não são declarados como SERIAL
+
+
  Depois vamos criar as tabelas de usuários e logs. Então, por favor
  > Execute o arquivo ./queries/users.sql no pgAdmin
 
