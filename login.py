@@ -32,16 +32,23 @@ def connect(user, password) -> User:
 
     db = Db()
 
-    cursor = db.conn.cursor()
-
-    query = (
+    query_login = (
         "SELECT userid, tipo, idoriginal_constructor, idoriginal_driver FROM users"
         "   WHERE login = ? AND password = MD5(?)"
     )
     
-    usuario = db.select_and_convert_to_json(query, user, password)
+    usuario = db.select_and_convert_to_json(query_login, user, password)
 
-    if usuario:            
+    if usuario:
+        query_insert_log = (
+            "INSERT INTO log_table (userid, acess)"
+	        "   VALUES (?, now())"
+        )
+
+        # Insere login na tabela de logs
+        cursor = db.conn.cursor()
+        cursor.execute(query_insert_log, usuario[0]['userid'])
+        db.conn.commit()
         return usuario
     else:
         raise ValueError('User ou senha invalidos')
