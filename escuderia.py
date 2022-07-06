@@ -97,7 +97,7 @@ def escuderia_relatorios(id_escuderia:int):
     )
 
     query_relatorio_3 = (
-        "SELECT D.forename Nome, D.surname Sobrenome, COUNT(*) Vitórias"
+        "SELECT D.forename Nome, D.surname Sobrenome, COUNT(*) vitorias"
         "   FROM results R"
         "       JOIN driver D USING (driverid)"
         "       WHERE R.position = 1 AND R.constructorid = ?"

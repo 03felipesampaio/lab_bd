@@ -28,6 +28,7 @@ def admin_relatorio_1():
     Returns:
         JSON: Json com relatorio
     """
+    
     db = Db()
     
     query_qtd_resultados = (
@@ -54,14 +55,15 @@ def aeroportos_proximos(cidade:str):
     Returns:
         JSON: JSON com os resultados
     """
+    
     db = Db()
     
     query_aeroportos = (
         # "-- O setup dessa query, incluindo os indices estao no arquivo setup_R2.sql"
-        "SELECT C.Name Cidade, A.iatacode, a.aeroporto, A.cid_aero,"
+        "SELECT C.Name Cidade, A.iatacode, A.\"Aeroporto\", A.\"Cid_Aero\","
         "    earth_distance("
         "        ll_to_earth("
-        "            A.latitude, A.longitude"
+        "            A.\"Latitude\", A.\"Longitude\""
         "        )," 
         "        ll_to_earth("
         "            C.Lat, C.Long"
@@ -71,16 +73,16 @@ def aeroportos_proximos(cidade:str):
         "   WHERE "
         "   	earth_distance("
         "   		ll_to_earth("
-        "   			A.latitude, A.longitude"
+        "   			A.\"Latitude\", A.\"Longitude\""
         "   		) , "
         "   		ll_to_earth("
         "   			C.lat, C.long"
         "   		)"
-        "   	) <= 100000 AND C.name='?';"
+        "   	) <= 100000 AND C.name ILIKE ?;"
     )
 
     results = {
-        'relatorio_2' : db.select_and_convert_to_json(query_aeroportos, cidade)
+        'relatorio_2' : db.select_and_convert_to_json(query_aeroportos, cidade+'%')
     }
 
     return results

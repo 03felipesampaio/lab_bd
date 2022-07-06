@@ -1,4 +1,4 @@
-from login import Login, User, connect
+from login import Login, User, connect, get_name
 from admin import admin_overview, admin_relatorio_1, aeroportos_proximos
 from escuderia import Escuderia, cria_escuderia, escuderia_overview, escuderia_relatorios
 from piloto import Piloto, cria_piloto, piloto_overview, piloto_relatorios, procura_piloto_por_nome
@@ -40,6 +40,10 @@ def try_login(login:Login):
     else:
         raise HTTPException(status_code=404, detail="Usuario ou senha incorretos")
 
+@app.post("/api/name")
+def name(user:User):
+    return get_name(user)
+
 
 @app.post("/api/overview")
 def get_overview(user:User):
@@ -75,7 +79,7 @@ def get_relatorios(user:User):
 
 @app.post("/api/relatorios/{cidade}")
 def get_relatorio_2(user:User, cidade:str):
-    if user.tipo == 'Adminstrador':
+    if user.tipo == 'Administrador':
         return aeroportos_proximos(cidade)
 
 
