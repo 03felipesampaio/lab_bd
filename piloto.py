@@ -52,7 +52,7 @@ def procura_piloto_por_nome(id_escuderia:int, id_piloto:str):
         "    WHERE r.constructorid = ?"
         "        AND d.forename ILIKE ?"
     )
-    print(id_piloto+'%')
+    
     return db.select_and_convert_to_json(query, id_escuderia, id_piloto+'%')
 
 
