@@ -1,3 +1,4 @@
+-- Nome da pista, ano e numero de vitorias
 SELECT RA.name nome, CAST(RA.YEAR AS VARCHAR(4)) ano, COUNT(*) vitorias
 	FROM results R
 	JOIN races RA USING(raceid)

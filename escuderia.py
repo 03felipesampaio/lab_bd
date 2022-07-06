@@ -36,8 +36,18 @@ def cria_escuderia(ref, nome, nacio, url):
 
 
 def check_escuderia(id_escuderia:int):
+    """Verifica se escuderia ja existe
+
+    Args:
+        id_escuderia (int): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    
     db = Db()
     cursor = db.conn.cursor()
+    # Verifica se existe uma escuderia com esse id
     cursor.execute("SELECT constructorid FROM constructors WHERE constructorid = ?", id_escuderia)
     if cursor.fetchone(): return True
     else: return False
@@ -49,7 +59,7 @@ def escuderia_overview(id_escuderia:int):
     
     db = Db()
 
-    # Queries referentes as mesmas do arquivo ./queries/overviewConstructor.sql
+    # Queries referente ao arquivo ./queries/overviewConstructor.sql
     query_qtd_vitorias = "SELECT COUNT(*) qtd_vitorias FROM results " \
         "WHERE position = 1 AND constructorid = ?;"
 

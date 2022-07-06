@@ -1,4 +1,7 @@
 CREATE TYPE userType AS ENUM ('Administrador', 'Escuderia', 'Piloto');
+
+
+-- Tabela de usuarios
 CREATE TABLE users(
 	userid SERIAL PRIMARY KEY,
 	login TEXT,
@@ -7,11 +10,18 @@ CREATE TABLE users(
 	idoriginal_constructor int REFERENCES constructors(constructorid) ON DELETE CASCADE,
 	idoriginal_driver int REFERENCES driver(driverid) ON DELETE CASCADE,
 	CONSTRAINT fk_user_driver_or_constructor
-		CHECK (idoriginal_constructor IS NULL AND idoriginal_driver IS NOT NULL OR
-        idoriginal_constructor IS NOT NULL AND idoriginal_driver IS NULL OR
-		idoriginal_constructor IS NULL AND idoriginal_driver IS NULL)
+		CHECK (
+			(idoriginal_constructor IS NULL 
+			  AND idoriginal_driver IS NOT NULL )
+			OR (idoriginal_constructor IS NOT NULL 
+			  AND idoriginal_driver IS NULL) 
+			OR (idoriginal_constructor IS NULL 
+			  AND idoriginal_driver IS NULL)
+		)
 );
 
+
+-- Adiciona user de piloto ao cria-lo
 CREATE OR REPLACE FUNCTION add_driver_user()
    RETURNS TRIGGER
 AS $$
@@ -33,6 +43,8 @@ CREATE TRIGGER add_driver_user
   FOR EACH ROW
   EXECUTE PROCEDURE add_driver_user();
   
+
+
 CREATE OR REPLACE FUNCTION add_constructors_user()
    RETURNS TRIGGER
 AS $$
